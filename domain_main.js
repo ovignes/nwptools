@@ -130,6 +130,8 @@ function buildInterface() {
 		{type: "input", name: 'ezony'+i, label: "0 (E) or E'-zoney:", validate: "validEzone", required: true, inputWidth: 60},
 		{type: "checkbox", name: 'showez'+i, label: "Show E(')zone: ", checked:false},
 		{type: "input", name: 'labela'+i, label: 'Label:', required: false, inputWidth: 150},
+		{type: "input", name: 'loffxa'+i, label: 'Label X offset:', value: 0, required: true, inputWidth: 60},
+		{type: "input", name: 'loffya'+i, label: 'Label Y offset:', value: 0, required: true, inputWidth: 60},
 		{type: "input", name: 'filla'+i, label: 'Fill percent (0-100):', validate: "validPercent", value: 0, required: true, inputWidth: 60},
 		{type: "input", name: 'lwida'+i, label: 'Border line width:', validate: "validLwidth", value: 2, required: true, inputWidth: 80}
 	    ]},
@@ -159,6 +161,8 @@ function buildInterface() {
 		{type: "input", name: 'polat'+i, label: 'PoLat:', validate: "validLat", required: true, inputWidth: 115},
 		{type: "input", name: 'polon'+i, label: 'PoLon:', validate: "validLon", required: true, inputWidth: 115},
 		{type: "input", name: 'labelh'+i, label: 'Label:', required: false, inputWidth: 150},
+		{type: "input", name: 'loffxh'+i, label: 'Label X offset:', value: 0, required: true, inputWidth: 60},
+		{type: "input", name: 'loffyh'+i, label: 'Label Y offset:', value: 0, required: true, inputWidth: 60},
 		{type: "input", name: 'fillh'+i, label: 'Fill percent (0-100):', validate: "validPercent", value: 0, required: true, inputWidth: 60},
 		{type: "input", name: 'lwidh'+i, label: 'Border line width:', validate: "validLwidth", value: 2, required: true, inputWidth: 80}
 	    ]},
@@ -257,6 +261,8 @@ function buildInterface() {
 		if (a.length > 10) oa[i-1].form.setItemValue("showez"+i,a[10]);
 		if (a.length > 11) oa[i-1].form.setItemValue("filla"+i,a[11]);
 		if (a.length > 12) oa[i-1].form.setItemValue("lwida"+i,a[12]);
+		if (a.length > 13) oa[i-1].form.setItemValue("loffxa"+i,a[13]);
+		if (a.length > 14) oa[i-1].form.setItemValue("loffya"+i,a[14]);
 	    }
 	}
 	cval = getCookie("h"+i);
@@ -272,8 +278,10 @@ function buildInterface() {
 		oh[i-1].form.setItemValue("polon"+i,a[6]);
 		oh[i-1].form.setItemValue("polat"+i,a[7]);
 		oh[i-1].form.setItemValue("labelh"+i,a[8]);
-		if (a.length > 10) oa[i-1].form.setItemValue("fillh"+i,a[10]);
-		if (a.length > 11) oa[i-1].form.setItemValue("lwidh"+i,a[11]);
+		if (a.length > 10) oh[i-1].form.setItemValue("fillh"+i,a[10]);
+		if (a.length > 11) oh[i-1].form.setItemValue("lwidh"+i,a[11]);
+		if (a.length > 12) oh[i-1].form.setItemValue("loffxh"+i,a[12]);
+		if (a.length > 13) oh[i-1].form.setItemValue("loffyh"+i,a[13]);
 	    }
 	}
     }
@@ -336,6 +344,8 @@ function showLambPS(ix) {
     if ( ! validPercent(filla) ) return false;
     var lwida = parseInt(oa[ix-1].form.getItemValue("lwida"+ix));
     if ( ! validLwidth(lwida) ) return false;
+    var loffxa = parseInt(oa[ix-1].form.getItemValue("loffxa"+ix));
+    var loffya = parseInt(oa[ix-1].form.getItemValue("loffya"+ix));
     var msg = "";
     var nlonx = nlon + ezonx;
     if ( ! hasValidPrimeFactors(nlonx) ) {
@@ -390,7 +400,7 @@ function showLambPS(ix) {
     }
     // form contains valid data
     var ezon1 = (ezony > 0 ? ezonx : ezone);
-    var cval = [nlon,nlat,lonc,latc,lon0,lat0,gsize,ezon1,ezony,label,showez,filla,lwida].join(":");
+    var cval = [nlon,nlat,lonc,latc,lon0,lat0,gsize,ezon1,ezony,label,showez,filla,lwida,loffxa,loffya].join(":");
     setCookie("a"+ix,cval,730);
     if (oa[ix-1].domain != null) map.removeLayer(oa[ix-1].domain);
     if (oa[ix-1].domez != null) map.removeLayer(oa[ix-1].domez);
@@ -457,6 +467,8 @@ function showLambPS(ix) {
 	    text: new ol.style.Text({
 		font: '12px Helvetica',
 		text: label,
+		offsetX: loffxa,
+		offsetY: loffya,
 		fill: fill,
 		stroke: txtstroke
 	    })
@@ -511,8 +523,10 @@ function showRotLatLon(ix) {
     if ( ! validPercent(fillh) ) return false;
     var lwidh = parseInt(oh[ix-1].form.getItemValue("lwidh"+ix));
     if ( ! validLwidth(lwidh) ) return false;
+    var loffxh = parseInt(oh[ix-1].form.getItemValue("loffxh"+ix));
+    var loffyh = parseInt(oh[ix-1].form.getItemValue("loffyh"+ix));
     // form contains valid data
-    var cval = [nlon,nlat,west,south,east,north,polon,polat,label,fillh,lwidh].join(":");
+    var cval = [nlon,nlat,west,south,east,north,polon,polat,label,fillh,lwidh,loffxh,loffyh].join(":");
     setCookie("h"+ix,cval,730);
     if (oh[ix-1].domain != null) map.removeLayer(oh[ix-1].domain);
     var obj;
@@ -566,6 +580,8 @@ function showRotLatLon(ix) {
 	    text: new ol.style.Text({
 		font: '12px Helvetica',
 		text: label,
+		offsetX: loffxh,
+		offsetY: loffyh,
 		fill: fill,
 		stroke: txtstroke
 	    })
