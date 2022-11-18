@@ -507,7 +507,7 @@ function showRotLatLon(ix) {
     var polat = parseFloat(oh[ix-1].form.getItemValue("polat"+ix));
     if ( ! validLat(polat) ) return false;
     var label = oh[ix-1].form.getItemValue("labelh"+ix);
-    var fillh = parseInt(oa[ix-1].form.getItemValue("fillh"+ix));
+    var fillh = parseInt(oh[ix-1].form.getItemValue("fillh"+ix));
     if ( ! validPercent(fillh) ) return false;
     var lwidh = parseInt(oh[ix-1].form.getItemValue("lwidh"+ix));
     if ( ! validLwidth(lwidh) ) return false;
