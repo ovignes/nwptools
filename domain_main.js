@@ -130,8 +130,8 @@ function buildInterface() {
 		{type: "input", name: 'ezony'+i, label: "0 (E) or E'-zoney:", validate: "validEzone", required: true, inputWidth: 60},
 		{type: "checkbox", name: 'showez'+i, label: "Show E(')zone: ", checked:false},
 		{type: "input", name: 'labela'+i, label: 'Label:', required: false, inputWidth: 150},
-		{type: "input", name: 'loffxa'+i, label: 'Label X offset:', value: 0, required: true, inputWidth: 60},
-		{type: "input", name: 'loffya'+i, label: 'Label Y offset:', value: 0, required: true, inputWidth: 60},
+		{type: "input", name: 'loffxa'+i, label: 'Label X offset (px):', value: 0, required: false, inputWidth: 60},
+		{type: "input", name: 'loffya'+i, label: 'Label Y offset (px):', value: 0, required: false, inputWidth: 60},
 		{type: "input", name: 'filla'+i, label: 'Fill percent (0-100):', validate: "validPercent", value: 0, required: true, inputWidth: 60},
 		{type: "input", name: 'lwida'+i, label: 'Border line width:', validate: "validLwidth", value: 2, required: true, inputWidth: 80}
 	    ]},
@@ -161,8 +161,8 @@ function buildInterface() {
 		{type: "input", name: 'polat'+i, label: 'PoLat:', validate: "validLat", required: true, inputWidth: 115},
 		{type: "input", name: 'polon'+i, label: 'PoLon:', validate: "validLon", required: true, inputWidth: 115},
 		{type: "input", name: 'labelh'+i, label: 'Label:', required: false, inputWidth: 150},
-		{type: "input", name: 'loffxh'+i, label: 'Label X offset:', value: 0, required: true, inputWidth: 60},
-		{type: "input", name: 'loffyh'+i, label: 'Label Y offset:', value: 0, required: true, inputWidth: 60},
+		{type: "input", name: 'loffxh'+i, label: 'Label X offset (px):', value: 0, required: false, inputWidth: 60},
+		{type: "input", name: 'loffyh'+i, label: 'Label Y offset (px):', value: 0, required: false, inputWidth: 60},
 		{type: "input", name: 'fillh'+i, label: 'Fill percent (0-100):', validate: "validPercent", value: 0, required: true, inputWidth: 60},
 		{type: "input", name: 'lwidh'+i, label: 'Border line width:', validate: "validLwidth", value: 2, required: true, inputWidth: 80}
 	    ]},
@@ -246,6 +246,7 @@ function buildInterface() {
     for (var i=1; i<=ntab; i++) {
 	var cval = getCookie("a"+i);
 	if ( cval != "" ) {
+	    //console.log(cval);
 	    var a = cval.split(":");
 	    if ( a.length >= 10 ) {
 		oa[i-1].form.setItemValue("nlon"+i,a[0]);
@@ -267,6 +268,7 @@ function buildInterface() {
 	}
 	cval = getCookie("h"+i);
 	if ( cval != "" ) {
+	    //console.log(cval);
 	    var a = cval.split(":");
 	    if ( a.length >= 9 ) {
 		oh[i-1].form.setItemValue("nlonh"+i,a[0]);
@@ -278,10 +280,10 @@ function buildInterface() {
 		oh[i-1].form.setItemValue("polon"+i,a[6]);
 		oh[i-1].form.setItemValue("polat"+i,a[7]);
 		oh[i-1].form.setItemValue("labelh"+i,a[8]);
-		if (a.length > 10) oh[i-1].form.setItemValue("fillh"+i,a[10]);
-		if (a.length > 11) oh[i-1].form.setItemValue("lwidh"+i,a[11]);
-		if (a.length > 12) oh[i-1].form.setItemValue("loffxh"+i,a[12]);
-		if (a.length > 13) oh[i-1].form.setItemValue("loffyh"+i,a[13]);
+		if (a.length > 9) oh[i-1].form.setItemValue("fillh"+i,a[9]);
+		if (a.length > 10) oh[i-1].form.setItemValue("lwidh"+i,a[10]);
+		if (a.length > 11) oh[i-1].form.setItemValue("loffxh"+i,a[11]);
+		if (a.length > 12) oh[i-1].form.setItemValue("loffyh"+i,a[12]);
 	    }
 	}
     }
