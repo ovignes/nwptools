@@ -462,8 +462,8 @@ function dumpAB() {
     var a8 = new Array();
     var b8 = new Array();
     for (var i=0; i<=nlev; i++) {
-	a8[i] = Ah[i].toPrecision(8);
-	b8[i] = Bh[i].toPrecision(8);
+	a8[i] = Ah[i].toPrecision(15);
+	b8[i] = Bh[i].toPrecision(15);
     }
     var ahalf = a8.join(", ");
     var bhalf = b8.join(", ");
