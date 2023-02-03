@@ -455,6 +455,9 @@ function showLambPS(ix) {
     var fill = new ol.style.Fill({
 	color: hex2rgba(oa[ix-1].color,fac)
     });
+    var filltxt = new ol.style.Fill({
+	color: hex2rgba(oa[ix-1].color,1.0)
+    });
     var stroke = new ol.style.Stroke({
 	color: oa[ix-1].color,
 	width: lwida
@@ -479,7 +482,7 @@ function showLambPS(ix) {
 		text: label,
 		offsetX: loffxa,
 		offsetY: loffya,
-		fill: fill,
+		fill: filltxt,
 		stroke: txtstroke
 	    })
 	})
@@ -569,6 +572,9 @@ function showRotLatLon(ix) {
     var fill = new ol.style.Fill({
 	color: hex2rgba(oh[ix-1].color,fac)
     });
+    var filltxt = new ol.style.Fill({
+	color: hex2rgba(oh[ix-1].color,1.0)
+    });
     var stroke = new ol.style.Stroke({
 	color: oh[ix-1].color,
 	width: lwidh
@@ -593,7 +599,7 @@ function showRotLatLon(ix) {
 		text: label,
 		offsetX: loffxh,
 		offsetY: loffyh,
-		fill: fill,
+		fill: filltxt,
 		stroke: txtstroke
 	    })
 	})
