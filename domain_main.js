@@ -387,8 +387,8 @@ function showLambPS(ix) {
     var xri = xc + 0.5*(nlon-ezone-1)*dg;
     var yb  = yc - 0.5*(nlat-ezone-1)*dg;
     var yti = yc + 0.5*(nlat-ezone-1)*dg;
-    var xre = xri + (ezone+ezonx)*dg;
-    var yte = yti + (ezone+ezony)*dg;
+    var xre = xri + (ezone+ezonx+1)*dg;
+    var yte = yti + (ezone+ezony+1)*dg;
     if ( is_lamb ) {
 	var objp = proj4('WGS84',proj_str).forward({x:0.0,y:90.0});
 	if ( objp.x >= xl && objp.x <= xre && objp.y >= yb && objp.y <= yte ) {
