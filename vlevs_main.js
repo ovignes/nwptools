@@ -1,6 +1,6 @@
 // Global variables
 var layout,a,b,form,chart,wins,form2,pop2,do_oldAB,title,vcheight,hmax;
-var nlev,npbl,ppbl,nstr,pstr,npres,nsigm,p1,Hnlev,psmin,alf1,alf3,alfh;
+var nlev,npbl,ppbl,nstr,pstr,npres,nsigm,p1,Hnlev,psmin,alf1,alf3,alfh,kmin,pmin;
 var formData = [
     {type: "fieldset", name: "vlevs", label: "Required parameters", list: [
 	{type: "input", name: 'nlev', label: 'Nlev total:', validate: "validLev", required: true, inputWidth: 100},
@@ -19,6 +19,7 @@ var formData = [
 	{type: "input", name: 'alf1', label: 'Strat. exp. alpha1 (in [1,5]):', validate: "validAlfN", required: false, inputWidth: 100},
 	{type: "input", name: 'alf3', label: 'PBL exp. alpha3 (in [1,5]):', validate: "validAlfN", required: false, inputWidth: 100},
 	{type: "checkbox", name: 'vcheight', label: 'Plot height (def=pressure): ', checked:false},
+	{type: "input", name: 'kmin', label: 'Top half level in plot (def=1):', validate: "validLev", required: false, inputWidth: 100},
     ]},
     {type: "button", name: "draw", value: "Draw levels", offsetTop:10, offsetLeft:10},
     {type: "button", name: "dump", value: "Print ahalf, bhalf", offsetTop:10, offsetLeft:10},
@@ -40,6 +41,10 @@ var TREF = 288.0;
 var G = 9.80665;
 var LAPRXPK = true;   // todo: optional?
 hmax = 40.;
+
+//defaults
+kmin = 1;
+pmin = 0.0;
 
 // Main function
 function buildInterface() {
@@ -89,10 +94,11 @@ function buildInterface() {
     var cval = getCookie("v");
     if ( cval != "" ) {
 	var a = cval.split(":");
-	if ( a.length == 14 ) {
+	if ( a.length == 15 ) {
 	    form.setItemValue("ppbl",a[2]);
 	    form.setItemValue("pstr",a[4]);
 	    form.setItemValue("psmin",a[9]);
+	    form.setItemValue("kmin",a[14]);
 	    if ( ! do_oldAB ) {
 		form.setItemValue("nlev",a[0]);
 		form.setItemValue("npbl",a[1]);
@@ -118,6 +124,7 @@ function buildInterface() {
 //	form.setItemValue("alf1",2.8);
 //	form.setItemValue("alf3",1.7);
 	form.setItemValue("vcheight",false);
+	form.setItemValue("kmin",0);
     }
     createChart(title);
     if ( validateAll() ) {
@@ -203,6 +210,8 @@ function validateAll() {
     alf3 = parseFloat(form.getItemValue("alf3"));
     if ( !isNaN(alf3) && ! validAlfN(alf3,do_oldAB) ) return false;
     vcheight = form.getItemValue("vcheight");
+    kmin = parseInt(form.getItemValue("kmin"));
+    if ( ! validLev(kmin,false) ) return false;
     // More sanity checks
     if ( psmin > 1000.0 || psmin < 100.0 ) {
 	alert("Minimum surface pressure is invalid, please check!");
@@ -225,7 +234,7 @@ function validateAll() {
 	// form contains valid data, save cookie
 	if (isNaN(alf1)) alf1 = "";
 	if (isNaN(alf3)) alf3 = "";
-	var cval = [nlev,npbl,ppbl,nstr,pstr,npres,nsigm,p1,Hnlev,psmin,alf1,alf3,alfh,vcheight].join(":");
+	var cval = [nlev,npbl,ppbl,nstr,pstr,npres,nsigm,p1,Hnlev,psmin,alf1,alf3,alfh,vcheight,kmin].join(":");
 	setCookie("v",cval,30);
     }
     ppbl *= 100.0;
@@ -334,7 +343,7 @@ function createChart(title) {
 	yAxis = { title: "Z (km)", start: 0, step: 1, end: hmax };
     } else {
 	xAxis = { title: title, template: "", lines: false, start: 0, end: 10 };
-	yAxis = { title: "P (hPa)", start: -1000, step: 50, end: 0 };
+	yAxis = { title: "P (hPa)", start: -1000, step: 50, end: -pmin };
     }
     b.attachChart({
 	view: "spline",
@@ -376,13 +385,15 @@ function drawLevels() {
     var data = new Array();
     var pmax = 100000;
     var pampl = 0.5*(pmax-psmin);
+    pmin = Ah[kmin] + Bh[kmin]*pmax;
+    pmin = 50.0*Math.floor(pmin/50.0);
     if ( ! vcheight ) {
 	for (var i=0; i<=10; i++) {
 	    var obj = {};
 	    obj.id = i;
 	    obj.x = i;
 	    var ps = pmax - pampl*(1.0 + Math.cos(i*Math.PI/5.0-Math.PI));
-	    for (var k=0; k<=nlev; k++) {
+	    for (var k=kmin; k<=nlev; k++) {
 		var s = "p" + k;
 		var p = Ah[k] + Bh[k]*ps;
 		obj[s] = -p/100.0;
@@ -399,7 +410,7 @@ function drawLevels() {
 	    var Tmean = TREF*(1.0 - 0.0065*0.5*tmp);
 	    var Hp = 0.001*Tmean*tmp;
 	    var pp = ps;
-	    for (var k=nlev; k>=1; k--) {
+	    for (var k=nlev; k>=kmin; k--) {
 		var s = "p" + k;
 		var pm = Ah[k] + Bh[k]*ps;
 		var T;   // approximate ICAO temperature profile
@@ -417,12 +428,12 @@ function drawLevels() {
 		Hp = Hm;
 		pp = pm;
 	    }
-	    hmax = Math.floor(obj.p1 + 1.);
+	    hmax = Math.floor(obj[s] + 1.);
 	    data.push( obj );
 	}
     }
     createChart(title);
-    for (var k=0; k<=nlev; k++) {
+    for (var k=kmin; k<=nlev; k++) {
 	var v = "#p" + k + "#";
 	var c = "#FF0000";
 	var w = 1;
