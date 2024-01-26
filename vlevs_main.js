@@ -124,7 +124,7 @@ function buildInterface() {
 //	form.setItemValue("alf1",2.8);
 //	form.setItemValue("alf3",1.7);
 	form.setItemValue("vcheight",false);
-	form.setItemValue("kmin",0);
+	form.setItemValue("kmin",1);
     }
     createChart(title);
     if ( validateAll() ) {
@@ -386,6 +386,9 @@ function drawLevels() {
     var pmax = 100000;
     var pampl = 0.5*(pmax-psmin);
     pmin = Ah[kmin] + Bh[kmin]*pmax;
+    if (pmin > 0.5*psmin) {
+	pampl = 0.5*(pmax-pmin)
+    }
     pmin = 50.0*Math.floor(pmin/5000.0);
     if ( ! vcheight ) {
 	for (var i=0; i<=10; i++) {
