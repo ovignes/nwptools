@@ -386,7 +386,7 @@ function drawLevels() {
     var pmax = 100000;
     var pampl = 0.5*(pmax-psmin);
     pmin = Ah[kmin] + Bh[kmin]*pmax;
-    pmin = 50.0*Math.floor(pmin/50.0);
+    pmin = 50.0*Math.floor(pmin/5000.0);
     if ( ! vcheight ) {
 	for (var i=0; i<=10; i++) {
 	    var obj = {};
@@ -428,7 +428,7 @@ function drawLevels() {
 		Hp = Hm;
 		pp = pm;
 	    }
-	    hmax = Math.floor(obj[s] + 1.);
+	    hmax = Math.floor(obj["p"+kmin] + 1.);
 	    data.push( obj );
 	}
     }
