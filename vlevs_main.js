@@ -386,8 +386,8 @@ function drawLevels() {
     var pmax = 100000;
     pmin = Ah[kmin] + Bh[kmin]*pmax;
     var pampl = 0.5*(pmax-psmin);
-    if (pmin > 0.5*psmin) {
-	pampl = 0.25*(pmax-pmin)
+    if (kmin > nstr) {
+	pampl = 0.05*(pmax-pmin)
     }
     pmin = 50.0*Math.floor(pmin/5000.0);
     if ( ! vcheight ) {
