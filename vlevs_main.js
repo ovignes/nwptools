@@ -19,7 +19,7 @@ var formData = [
 	{type: "input", name: 'alf1', label: 'Strat. exp. alpha1 (in [1,5]):', validate: "validAlfN", required: false, inputWidth: 100},
 	{type: "input", name: 'alf3', label: 'PBL exp. alpha3 (in [1,5]):', validate: "validAlfN", required: false, inputWidth: 100},
 	{type: "checkbox", name: 'vcheight', label: 'Plot height (def=pressure): ', checked:false},
-	{type: "input", name: 'kmin', label: 'Top half level in plot (def=1):', validate: "validLev", required: false, inputWidth: 100},
+	{type: "input", name: 'kmin', label: 'Top half level in plot (def=1):', required: false, inputWidth: 100},
     ]},
     {type: "button", name: "draw", value: "Draw levels", offsetTop:10, offsetLeft:10},
     {type: "button", name: "dump", value: "Print ahalf, bhalf", offsetTop:10, offsetLeft:10},
@@ -211,8 +211,11 @@ function validateAll() {
     if ( !isNaN(alf3) && ! validAlfN(alf3,do_oldAB) ) return false;
     vcheight = form.getItemValue("vcheight");
     kmin = parseInt(form.getItemValue("kmin"));
-    if ( ! validLev(kmin,false) ) return false;
     // More sanity checks
+    if (kmin < 1 || kmin > nlev-1) {
+	alert("Top half level in plot illegal, using 1!");
+	kmin = 1
+    }
     if ( psmin > 1000.0 || psmin < 100.0 ) {
 	alert("Minimum surface pressure is invalid, please check!");
 	return false;
