@@ -240,6 +240,11 @@ function buildInterface() {
 	renderer: 'canvas',
 	view: map_view[mapix]
     });
+    var mouse_position = new ol.control.MousePosition({
+	coordinateFormat: ol.coordinate.createStringXY(4),
+	projection: 'EPSG:4326'
+    });
+    map.addControl(mouse_position);
     map.addLayer(base_layers[basix]);
     b.dataType = "maps";
     b.dataObj = map;
