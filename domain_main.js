@@ -80,7 +80,7 @@ var base_layers = [
     new ol.layer.Tile({
 	source: new ol.source.TileWMS({
 	    url: 'https://ahocevar.com/geoserver/wms',
-	    crossOrigin: '',
+	    crossOrigin: 'anonymous',
 	    params: {
 		'LAYERS': 'ne:NE1_HR_LC_SR_W_DR,ne:ne_10m_admin_0_boundary_lines_land',
 		'TILED': true,
@@ -94,7 +94,7 @@ var base_layers = [
             url: 'http://www.idee.es/wms/MTN-Raster/MTN-Raster',
             params: {
                 'LAYERS': 'mtn_rasterizado',
-                'TRANSPARENT': 'false'
+                'TRANSPARENT': 'true'
             },
 	    projection: 'EPSG:4326',
         }),
@@ -708,7 +708,7 @@ function toolbarClick(id) {
 	map.setView(map_view[mapix]);
 	toolbar.setItemText("tproj",mapOpts[mapix][2]);
 	setCookie("mapix",mapix,730);
-    } else if (ix >= 10 && ix <= 11) {
+    } else if (ix >= 10 && ix <= 12) {
 	ix = ix - 10;
 	if (ix != basix) {
 	    map.removeLayer(base_layers[basix]);
