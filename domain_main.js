@@ -80,7 +80,7 @@ var base_layers = [
     new ol.layer.Tile({
 	source: new ol.source.TileWMS({
 	    url: 'https://ahocevar.com/geoserver/wms',
-	    //crossOrigin: 'anonymous',
+	    crossOrigin: 'https://ahocevar.com/',
 	    params: {
 		'LAYERS': 'ne:NE1_HR_LC_SR_W_DR,ne:ne_10m_admin_0_boundary_lines_land',
 		'TILED': true,
