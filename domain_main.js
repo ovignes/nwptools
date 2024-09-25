@@ -70,6 +70,7 @@ var iwin = null;
 var baseOpts = [
     [ '10','obj','OpenStreetMap',''],
     [ '11','obj','Natural Earth',''],
+    [ '12','obj','MTN raster (test)',''],
 ];
 var base_layers = [
     new ol.layer.Tile({
@@ -86,6 +87,17 @@ var base_layers = [
 	    },
 	    projection: 'EPSG:4326',
 	}),
+	opacity: 0.7
+    }),
+    new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+            url: 'http://www.idee.es/wms/MTN-Raster/MTN-Raster',
+            params: {
+                'LAYERS': 'mtn_rasterizado',
+                'TRANSPARENT': 'false'
+            },
+	    projection: 'EPSG:4326',
+        }),
 	opacity: 0.7
     })
 ];
